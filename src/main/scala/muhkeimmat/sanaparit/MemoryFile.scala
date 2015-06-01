@@ -5,7 +5,7 @@ import java.nio.CharBuffer
 import java.nio.channels.FileChannel.MapMode
 import java.nio.charset.StandardCharsets
 
-import rx.lang.scala.{Subscription, Observable}
+import rx.lang.scala.{Observable, Subscription}
 
 class MemoryFile(path: String) {
 

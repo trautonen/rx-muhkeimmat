@@ -11,7 +11,9 @@ class WordCollector(child: Subscriber[Word]) extends Subscriber[Char] {
     if (isSplitChar(value) && word.nonEmpty) {
       append()
     } else {
-      if (value.isLetter) word += value.toLower
+      val lcase = value.toLower
+      value.isLetter
+      if (isValidLetter(lcase)) word += lcase
       request(1)
     }
   }
@@ -34,7 +36,11 @@ class WordCollector(child: Subscriber[Word]) extends Subscriber[Char] {
     word.clear()
   }
 
-  private def isSplitChar(value: Char) = {
+  private def isValidLetter(value: Char): Boolean = {
+    (value >= 'a' && value <= 'z') || value == 'å' || value == 'ä' || value == 'ö'
+  }
+
+  private def isSplitChar(value: Char): Boolean = {
     value == '.' || value == ',' || value == '/' || value == '\\' || value.isWhitespace
   }
 }

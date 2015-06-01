@@ -1,6 +1,6 @@
 package muhkeimmat.sanaparit
 
-import org.scalatest.{Matchers, FunSpec}
+import org.scalatest.{FunSpec, Matchers}
 
 class MainSpec extends FunSpec with Matchers {
 
