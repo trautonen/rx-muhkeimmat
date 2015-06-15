@@ -4,16 +4,17 @@ import rx.lang.scala.Subscriber
 
 class WordCollector(child: Subscriber[Word]) extends Subscriber[Char] {
 
-  private var word: StringBuilder = new StringBuilder(32)
+  private var word: StringBuilder = new StringBuilder(64)
   private var wordCount: Long = 0
 
   override def onNext(value: Char): Unit = {
-    if (isSplitChar(value) && word.nonEmpty) {
+    val valid = isValidLetter(value)
+    if (valid) {
+      word += value.toLower
+      request(1)
+    } else if (!valid && word.nonEmpty) {
       append()
     } else {
-      val lcase = value.toLower
-      value.isLetter
-      if (isValidLetter(lcase)) word += lcase
       request(1)
     }
   }
@@ -37,11 +38,8 @@ class WordCollector(child: Subscriber[Word]) extends Subscriber[Char] {
   }
 
   private def isValidLetter(value: Char): Boolean = {
-    (value >= 'a' && value <= 'z') || value == 'å' || value == 'ä' || value == 'ö'
-  }
-
-  private def isSplitChar(value: Char): Boolean = {
-    value == '.' || value == ',' || value == '/' || value == '\\' || value.isWhitespace
+    (value >= 'a' && value <= 'z') || value == 'å' || value == 'ä' || value == 'ö' ||
+    (value >= 'A' && value <= 'Z') || value == 'Å' || value == 'Ä' || value == 'Ö'
   }
 }
 
